@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Fluentra</title>
+  <meta name="description" content="Learn American English the way it sticks: 3,600 words in real sentences with spaced repetition, the sounds of English, grammar in context, and speaking practice. Free, private, works offline.">
+  <meta name="theme-color" content="#f6f7f3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111513" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta property="og:title" content="Fluentra">
+  <meta property="og:description" content="Learn American English vocabulary, sounds, grammar and speaking with spaced repetition.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Charis+SIL:ital,wght@0,400;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <a class="sr-only" href="#view">Skip to content</a>
+  <div class="shell">
+    <aside class="rail" aria-label="Main">
+      <a class="brand" href="#/today" aria-label="Fluentra, home">
+        <span class="brand-name">Fluentra</span>
+        <span class="brand-ipa">/fluˈɛntrə/</span>
+      </a>
+      <nav class="nav" id="nav"></nav>
+      <div class="rail-foot">
+        <a href="#/about">About this project</a>
+        <button class="theme-btn" id="theme" type="button">Dark mode</button>
+      </div>
+    </aside>
+    <header class="topbar">
+      <a class="brand" href="#/today" aria-label="Fluentra, home"><span class="brand-name">Fluentra</span><span class="brand-ipa">/fluˈɛntrə/</span></a>
+      <a class="icon-link" href="#/progress" aria-label="Progress" id="top-progress"></a>
+    </header>
+    <main id="view" tabindex="-1"></main>
+    <nav class="tabbar" id="tabbar" aria-label="Main"></nav>
+  </div>
+  <noscript><p style="padding:24px">Fluentra needs JavaScript to run.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

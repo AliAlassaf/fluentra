@@ -1,0 +1,12 @@
+{
+  "name": "fluentra",
+  "version": "1.0.0",
+  "description": "Learn American English vocabulary, sounds, grammar and speaking with spaced repetition. A zero-dependency, offline-first web app.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "python3 -m http.server 8080"
+  },
+  "license": "MIT"
+}
