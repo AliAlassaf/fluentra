@@ -7,6 +7,7 @@ import { LEVELS, LEVEL_NAMES } from "../core/session.js";
 import { isMature, dayNumber, inWords } from "../core/srs.js";
 import { say } from "../speech.js";
 import { clipBox } from "../clips.js";
+import { explainBox, mineBox } from "../explain.js";
 
 const PAGE = 60;
 const USES = {
@@ -78,7 +79,9 @@ export function openWord(w, s, speak) {
         h("button", { class: "btn quiet say", "aria-label": "Listen to the sentence", onclick: () => speak(w.ex) }, icon("play")))),
     w.syn?.length ? h("section", {}, h("h3", {}, "Similar words"), h("p", { class: "read" }, w.syn.join(", "))) : null,
     w.casual ? h("section", {}, h("h3", {}, "Said casually"), h("p", { class: "read" }, w.casual)) : null,
+    h("section", {}, h("h3", {}, "Make it yours"), mineBox(s, w)),
     h("section", {}, h("h3", {}, "Hear it in real videos"), clipBox(w.word)),
+    h("section", {}, h("h3", {}, "Explain it simply"), explainBox(s, { target: w.word, model: w.def, gapKey: `word:${w.id}`, what: `"${w.word}"` })),
     h("section", {}, h("h3", {}, "Your progress"),
       h("p", { class: "read" }, !c ? "Not studied yet. It will come up in your daily sessions." : isMature(c) ? "Learned. It comes back now and then so you keep it." : `Studying: answered ${plural(c.reps + c.lapses, "time")}, next review ${c.due <= dayNumber() ? "today" : inWords(c.due - dayNumber())}.`)));
 }

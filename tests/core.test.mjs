@@ -23,7 +23,9 @@ test("findWord marks the word in any regular form, and phrases split by other wo
   assert.deepEqual(hit("He tried twice.", "try"), ["tried"]);
   assert.deepEqual(hit("We stopped early.", "stop"), ["stopped"]);
   assert.deepEqual(hit("I finally figured it out.", "figure out"), ["figured", "out"]);
-  assert.equal(findWord("She ran home.", "run"), null); // irregular: not found
+  assert.deepEqual(hit("She ran home.", "run"), ["ran"]); // common irregular verbs too
+  assert.deepEqual(hit("We've gotten better.", "get"), ["gotten"]);
+  assert.equal(findWord("She jogged home.", "run"), null);
 });
 
 test("checkAnswer accepts the word, its form in the example, and flags typos as close", () => {

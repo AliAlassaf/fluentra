@@ -68,7 +68,7 @@ test("the offline cache lists only files that exist, including every page", () =
   const sw = readFileSync(new URL("../sw.js", import.meta.url), "utf8");
   const list = [...sw.matchAll(/"([^"]+\.(?:js|css|json|html|svg|webmanifest))"/g)].map((m) => m[1]);
   for (const f of list) assert.ok(existsSync(new URL(`../${f}`, import.meta.url)), `missing ${f}`);
-  for (const view of ["today", "study", "words", "sounds", "grammar", "speak", "progress", "about", "welcome"]) {
+  for (const view of ["today", "study", "words", "sounds", "grammar", "speak", "practice", "progress", "about", "welcome"]) {
     assert.ok(list.includes(`js/views/${view}.js`), `sw.js doesn't cache ${view}`);
   }
 });

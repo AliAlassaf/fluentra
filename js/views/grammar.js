@@ -6,6 +6,7 @@ import * as data from "../data.js";
 import { addTime } from "../core/progress.js";
 import { dayNumber } from "../core/srs.js";
 import { say } from "../speech.js";
+import { explainBox } from "../explain.js";
 
 const LEVELS = { A2: "Basics", B1: "Everyday English", B2: "Accuracy and natural style", C1: "Advanced" };
 
@@ -74,5 +75,7 @@ function detail(root, s, p, points) {
         return h("div", { class: "quiz-q" }, h("p", {}, `${n + 1}. ${q.q}`), opts, fb);
       })));
   }
+  root.append(h("section", { class: "g-section" }, h("h2", {}, "Explain it simply"),
+    explainBox(s, { target: "", model: [p.meaning, p.why].filter(Boolean).join(" "), gapKey: `grammar:${p.id}`, what: "this grammar point" })));
   if (next) root.append(h("div", { class: "row", style: "margin-top:40px" }, h("a", { class: "btn", href: `#/grammar/${next.id}` }, `Next: ${next.title}`)));
 }

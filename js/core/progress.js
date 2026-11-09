@@ -13,6 +13,10 @@ export function emptyState() {
     ear: {},       // contrastId → { n, last }
     grammar: {},   // pointId → { best, of }
     speak: {},     // conversationId → { best, at }
+    respond: {},   // conversation line id → srs card (produce the reply from memory)
+    tenses: {},    // tense → { n, last } (tense mix accuracy)
+    mine: {},      // wordId → { text, at } (your own sentence with the word)
+    gaps: {},      // "word:<id>" | "grammar:<id>" → { at } (where explaining it simply got stuck)
     settings: { rate: 0.95, voice: "" },
   };
 }
@@ -24,13 +28,14 @@ export function normalize(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw new Error("This file isn't a Fluentra backup.");
   const obj = (x) => (x && typeof x === "object" && !Array.isArray(x) ? x : {});
   const out = { ...base };
-  for (const k of ["cards", "log", "ear", "grammar", "speak"]) out[k] = obj(raw[k]);
+  for (const k of ["cards", "log", "ear", "grammar", "speak", "respond", "tenses", "mine", "gaps"]) out[k] = obj(raw[k]);
   out.settings = { ...base.settings, ...obj(raw.settings) };
   const p = raw.profile;
   out.profile = p && typeof p === "object" && p.level ? { level: String(p.level), daily: Number(p.daily) || 10, since: Number(p.since) || 0 } : null;
-  for (const [id, c] of Object.entries(out.cards)) {
-    if (!c || typeof c.due !== "number" || typeof c.ivl !== "number") delete out.cards[id];
+  for (const deck of [out.cards, out.respond]) {
+    for (const [id, c] of Object.entries(deck)) if (!c || typeof c.due !== "number" || typeof c.ivl !== "number") delete deck[id];
   }
+  for (const [id, m] of Object.entries(out.mine)) if (!m || typeof m.text !== "string") delete out.mine[id];
   return out;
 }
 

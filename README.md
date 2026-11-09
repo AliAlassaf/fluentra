@@ -1,6 +1,6 @@
 # Fluentra
 
-**Learn American English the way it sticks.** Fluentra is a free web app for intermediate learners who want to become fluent: 3,600 words learned inside real sentences with spaced repetition, the 45 sounds of American English with ear training, 42 grammar points with quizzes, and 136 everyday conversations to practice speaking out loud.
+**Learn American English the way it sticks.** Fluentra is a free web app for intermediate learners who want to become fluent: 3,600 words learned inside real sentences with spaced repetition, drills that make you produce English rather than reread it, the 45 sounds of American English with ear training, 42 grammar points with quizzes, and 136 everyday conversations to practice speaking out loud.
 
 No account, no server, no tracking. It runs entirely in the browser and works offline.
 
@@ -18,6 +18,12 @@ No account, no server, no tracking. It runs entirely in the browser and works of
 | **Ear training** | Minimal pairs (ship / sheep, think / sink) in rounds of 12, weighted toward the pairs you get wrong. |
 | **Grammar** | 42 points from basics to advanced: why it matters, the pattern, how Americans actually say it, common mistakes, and a quiz. |
 | **Speaking** | Conversations line by line. Speech recognition scores how close your line was, and "Hide my lines" turns it into a memory exercise. |
+| **Respond** | A real situation ("Hi, I don't think we've met"), and you produce the reply from memory, with its own review schedule. Recall instead of rereading. |
+| **Shadow** | Repeat natural, fast sentences at the speaker's speed (your pace is compared with the voice), then use each idiom in a sentence of your own. |
+| **Tense mix** | Past, present, future and perfect shuffled together, never the same tense twice in a row, so you practice choosing the tense on the spot. |
+| **Hands-free** | Eyes-free recall for driving: hear a meaning, say the word in the pause, hear the answer. Uses words you saw 2+ days ago, when they're on the tip of your tongue. Works with headphone and car media buttons. |
+| **Explain it simply** | The Feynman check on every word and grammar point: explain it as if to a child. Using the word itself, long words or too few words are flagged, and what you got stuck on becomes your gaps list. |
+| **Make it yours** | Write a sentence from your own life with each word. It appears with the word in reviews and in hands-free recall. |
 | **Progress** | Words learned and studied, a streak, recall accuracy, an activity grid, and progress by level. Export, import or erase your data. |
 
 ![A new word in the study session](docs/study.png)
@@ -29,7 +35,7 @@ No account, no server, no tracking. It runs entirely in the browser and works of
 ## How it's built
 
 - **No framework, no build step, no dependencies.** Plain ES modules, HTML and CSS. Pages are loaded on demand by a small hash router.
-- **Pure, tested core.** Scheduling (`js/core/srs.js`), session planning (`session.js`), answer checking (`text.js`), ear-training rounds (`ear.js`) and progress statistics (`progress.js`) are pure functions with no DOM access, covered by Node's built-in test runner.
+- **Pure, tested core.** Scheduling (`js/core/srs.js`), session planning (`session.js`), answer checking with irregular verbs (`text.js`), ear-training rounds (`ear.js`), tense rounds (`tenses.js`), practice planning and the explanation check (`practice.js`) and progress statistics (`progress.js`) are pure functions with no DOM access, covered by Node's built-in test runner.
 - **Content tests.** `tests/data.test.mjs` checks every data file: no duplicates, valid quiz answers, sound examples pointing at real letters, English-only text, and an offline cache list that matches the files on disk.
 - **Offline and installable.** A service worker caches the app and its data (network first, cache as fallback), and a web manifest makes it installable on phones.
 - **On-device speech.** Listening and speaking use the browser's Web Speech API, so voice data never touches a Fluentra server.

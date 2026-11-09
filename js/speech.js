@@ -48,9 +48,10 @@ export function say(text, { rate = 0.95, voice = "", alt = false } = {}) {
 }
 export const stop = () => synth?.cancel();
 
-/** Listen for one English sentence. Resolves { text, alternatives } or rejects with a readable message.
- *  The returned promise has .stop() to finish early. */
-export function listen({ maxMs = 12000 } = {}) {
+/** Listen to English. Resolves { text, alternatives, ms } — ms is how long you spoke, from the first sound to the last
+ *  result — or rejects with a readable message. `long` keeps listening through pauses (for explanations) until you
+ *  stop it. The returned promise has .stop() to finish early. */
+export function listen({ maxMs = 12000, long = false } = {}) {
   let rec = null;
   const p = new Promise((resolve, reject) => {
     if (!Recognition) return reject(new Error("Speech input isn't available in this browser. Try Chrome or Safari, or type your answer."));
@@ -58,21 +59,41 @@ export function listen({ maxMs = 12000 } = {}) {
     rec.lang = "en-US";
     rec.interimResults = true;
     rec.maxAlternatives = 3;
-    rec.continuous = false;
-    let best = null;
+    rec.continuous = long;
+    let finals = [], last = null, began = 0, ended = 0;
     const timer = setTimeout(() => rec.stop(), maxMs);
+    rec.onspeechstart = () => { began ||= performance.now(); };
     rec.onresult = (e) => {
-      const r = e.results[e.results.length - 1];
-      best = { text: r[0].transcript, alternatives: [...r].map((a) => a.transcript) };
+      began ||= performance.now();
+      ended = performance.now();
+      finals = [];
+      for (let i = 0; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal || i === e.results.length - 1) finals.push(r);
+      }
+      last = finals.at(-1);
+    };
+    const result = () => {
+      if (!last) return { text: "", alternatives: [], ms: 0 };
+      const head = finals.slice(0, -1).map((r) => r[0].transcript).join(" ");
+      const alts = [...last].map((a) => `${head} ${a.transcript}`.trim());
+      return { text: alts[0], alternatives: alts, ms: began && ended ? Math.round(ended - began) : 0 };
     };
     rec.onerror = (e) => {
       clearTimeout(timer);
-      if (e.error === "no-speech") return resolve({ text: "", alternatives: [] });
+      if (e.error === "no-speech" || e.error === "aborted") return resolve(result());
       reject(new Error(e.error === "not-allowed" ? "Microphone access is blocked. Allow it in your browser settings, then try again." : `Speech input stopped (${e.error}).`));
     };
-    rec.onend = () => { clearTimeout(timer); resolve(best || { text: "", alternatives: [] }); };
+    rec.onend = () => { clearTimeout(timer); resolve(result()); };
     try { rec.start(); } catch (err) { reject(err); }
   });
   p.stop = () => rec?.stop();
   return p;
+}
+
+/** Say text and measure how long the voice took (ms), for comparing your speed when shadowing. */
+export async function sayTimed(text, opts) {
+  const t0 = performance.now();
+  const ok = await say(text, opts);
+  return ok ? Math.round(performance.now() - t0) : 0;
 }

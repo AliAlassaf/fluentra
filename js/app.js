@@ -9,8 +9,9 @@ const PAGES = [
   { id: "today", label: "Today", tab: true },
   { id: "words", label: "Words", tab: true },
   { id: "sounds", label: "Sounds", tab: true },
-  { id: "grammar", label: "Grammar", tab: true },
+  { id: "practice", label: "Practice", tab: true },
   { id: "speak", label: "Speak", tab: true },
+  { id: "grammar", label: "Grammar", tab: false },
   { id: "progress", label: "Progress", tab: false },
 ];
 const VIEWS = {
@@ -20,6 +21,7 @@ const VIEWS = {
   sounds: () => import("./views/sounds.js"),
   grammar: () => import("./views/grammar.js"),
   speak: () => import("./views/speak.js"),
+  practice: () => import("./views/practice.js"),
   progress: () => import("./views/progress.js"),
   about: () => import("./views/about.js"),
   welcome: () => import("./views/welcome.js"),
@@ -32,7 +34,8 @@ function drawNav(current) {
   const nav = document.getElementById("nav"), tabbar = document.getElementById("tabbar");
   nav.replaceChildren(...PAGES.map((p) => h("a", { href: `#/${p.id}`, "aria-current": p.id === current ? "page" : null },
     icon(p.id), p.label, p.id === "today" ? h("span", { class: "badge", id: "due-badge" }) : null)));
-  tabbar.replaceChildren(...PAGES.filter((p) => p.tab).map((p) => h("a", { href: `#/${p.id}`, "aria-current": p.id === current ? "page" : null },
+  const TAB_ORDER = ["today", "words", "practice", "speak", "sounds"];
+  tabbar.replaceChildren(...TAB_ORDER.map((id) => PAGES.find((p) => p.id === id)).map((p) => h("a", { href: `#/${p.id}`, "aria-current": p.id === current ? "page" : null },
     icon(p.id), p.label)));
   const top = document.getElementById("top-progress");
   if (!top.firstChild) top.append(icon("progress"));
@@ -55,6 +58,7 @@ async function route() {
   let view = VIEWS[name] ? name : "today";
   if (!load().profile && !["about", "welcome"].includes(view)) view = "welcome";
   drawNav(view === "study" || view === "welcome" ? "today" : view);
+  document.body.dataset.view = view;
   cleanup?.();
   cleanup = null;
   document.querySelectorAll(".sheet-back").forEach((el) => el.remove()); // a sheet never outlives its page

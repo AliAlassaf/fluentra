@@ -51,6 +51,7 @@ export async function render(root) {
   const grammar = await data.get("grammar");
   const nextGrammar = grammar.find((g) => !s.grammar[g.id]) || grammar[0];
   const more = h("nav", { class: "more", "aria-label": "More practice" },
+    moreLink("#/practice/respond", "practice", "Say it from memory", "Real situations: you produce the reply, no reading first", "5 min"),
     moreLink("#/sounds/ear", "sounds", "Train your ear", weak ? `${plural(weak, "sound pair")} to work on` : "Tell similar sounds apart: ship or sheep?", "2 min"),
     moreLink(`#/speak`, "speak", "Practice a conversation", `${conv.length} everyday situations, line by line`, "5 min"),
     moreLink(`#/grammar/${nextGrammar.id}`, "grammar", `Grammar: ${nextGrammar.title}`, nextGrammar.meaning || "One point, with a short quiz", "4 min"));

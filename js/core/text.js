@@ -46,9 +46,26 @@ export const bestScore = (guesses, target) => Math.max(0, ...[].concat(guesses |
 
 const PLACEHOLDER = new Set(["sb", "sth", "someone", "something", "somebody", "one's", "oneself", "+"]);
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-/** The forms a word takes in a sentence: realize → realizes, realized; try → tried; stop → stopped. */
+// Common irregular verbs: base → past and past participle forms.
+const IRREGULAR = Object.fromEntries(`be was were been|become became|begin began begun|break broke broken|bring brought|build built|
+buy bought|catch caught|choose chose chosen|come came|cost|cut|deal dealt|do did done|draw drew drawn|drink drank drunk|
+drive drove driven|eat ate eaten|fall fell fallen|feel felt|fight fought|find found|fly flew flown|forget forgot forgotten|
+forgive forgave forgiven|freeze froze frozen|get got gotten|give gave given|go went gone|grow grew grown|hang hung|have had|
+hear heard|hide hid hidden|hit|hold held|hurt|keep kept|know knew known|lay laid|lead led|leave left|lend lent|let|lie lay lain|
+lose lost|make made|mean meant|meet met|pay paid|put|quit|read|ride rode ridden|ring rang rung|rise rose risen|run ran|say said|
+see saw seen|seek sought|sell sold|send sent|set|shake shook shaken|shine shone|shoot shot|show showed shown|shut|sing sang sung|
+sink sank sunk|sit sat|sleep slept|speak spoke spoken|spend spent|spin spun|split|spread|stand stood|steal stole stolen|stick stuck|
+sting stung|strike struck|swear swore sworn|swim swam swum|take took taken|teach taught|tear tore torn|tell told|think thought|
+throw threw thrown|understand understood|wake woke woken|wear wore worn|win won|write wrote written|bite bit bitten|blow blew blown|
+bend bent|bet|bind bound|bleed bled|breed bred|burst|dig dug|feed fed|flee fled|forbid forbade forbidden|light lit|overcome overcame|
+undergo underwent undergone|withdraw withdrew withdrawn|upset|weep wept|wind wound|arise arose arisen|swing swung`
+  .split("|").map((x) => x.trim().split(/\s+/)).map(([base, ...rest]) => [base, rest]));
+
+/** The forms a word takes in a sentence: realize → realizes, realized; try → tried; stop → stopped; run → ran. */
 function forms(t) {
   const e = esc(t), alts = [`${e}(?:s|es|ed|d|ing|er|ers|est|ly|'s|’s)?`];
+  for (const f of IRREGULAR[t] || []) alts.push(esc(f));
+  if (t === "be") alts.push("is", "are", "am", "being");
   if (t.length > 2 && t.endsWith("e")) alts.push(`${esc(t.slice(0, -1))}(?:ing|ed|er|ers|est|es)`);
   if (/[^aeiou]y$/.test(t)) alts.push(`${esc(t.slice(0, -1))}i(?:es|ed|er|ers|est|ly|ness)`);
   if (/[^aeiou][aeiou][bdgklmnprt]$/.test(t)) alts.push(`${e}${t.at(-1)}(?:ed|ing|er|ers|est)`);

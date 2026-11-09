@@ -1,12 +1,12 @@
 // Offline support: the app shell and course data are cached on first visit; the network is used first so updates
 // arrive as soon as you're online, and the cache answers when you're not.
-const CACHE = "fluentra-v1";
+const CACHE = "fluentra-v2";
 const SHELL = [
   "./", "index.html", "css/app.css", "manifest.webmanifest", "icons/icon.svg",
-  "js/app.js", "js/ui.js", "js/store.js", "js/speech.js", "js/data.js", "js/clips.js",
-  "js/core/text.js", "js/core/srs.js", "js/core/session.js", "js/core/ear.js", "js/core/progress.js",
+  "js/app.js", "js/ui.js", "js/store.js", "js/speech.js", "js/data.js", "js/clips.js", "js/explain.js",
+  "js/core/text.js", "js/core/srs.js", "js/core/session.js", "js/core/ear.js", "js/core/progress.js", "js/core/practice.js", "js/core/tenses.js",
   "js/views/today.js", "js/views/study.js", "js/views/words.js", "js/views/sounds.js", "js/views/grammar.js",
-  "js/views/speak.js", "js/views/progress.js", "js/views/about.js", "js/views/welcome.js",
+  "js/views/speak.js", "js/views/practice.js", "js/views/progress.js", "js/views/about.js", "js/views/welcome.js",
   "data/words.json", "data/phrases.json", "data/grammar.json", "data/conversations.json", "data/sounds.json",
 ];
 self.addEventListener("install", (e) => {

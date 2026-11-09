@@ -25,6 +25,7 @@ const PATHS = {
   sounds: '<path d="M3 12h2M7 8v8M11 4v16M15 7v10M19 10v4M21 12h0"/>',
   grammar: '<path d="M8 4H5v16h3M16 4h3v16h-3"/><path d="M9.5 15l2.5-7 2.5 7M10.3 13h3.4"/>',
   speak: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+  practice: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
   progress: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
   play: '<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',

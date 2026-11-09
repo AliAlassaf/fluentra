@@ -10,6 +10,7 @@ import { answerWord } from "../core/progress.js";
 import { checkAnswer, hintOf } from "../core/text.js";
 import { say, stop } from "../speech.js";
 import { refreshBadge } from "../app.js";
+import { mineBox } from "../explain.js";
 
 const LABEL = { again: "Again", hard: "Hard", good: "Good", easy: "Easy" };
 
@@ -56,6 +57,8 @@ export async function render(root, [mode]) {
       h("div", { class: "row", style: "align-items:flex-start;gap:12px" }, markedSentence(w.ex, w.word, { swipe: true }),
         h("button", { class: "btn quiet say", "aria-label": "Listen to the sentence", onclick: () => speak(w.ex) }, icon("play"))),
       synLine(w),
+      h("details", { class: "mine-d", style: "margin-top:20px" }, h("summary", { class: "btn quiet", style: "margin-left:-12px" }, "Make it yours: a sentence from your life"),
+        h("div", { style: "margin-top:12px" }, mineBox(s, w))),
       h("div", { class: "row", style: "margin-top:28px" },
         h("button", { class: "btn primary big", id: "go", onclick: () => { i++; next(); } }, "Got it")),
       h("p", { class: "keys" }, "It comes back in a few cards to check you remember. Press Enter to continue."));
@@ -63,6 +66,7 @@ export async function render(root, [mode]) {
     speak(w.word);
     card.querySelector("#go").focus();
     keyHandler = (e) => {
+      if (/^(TEXTAREA|INPUT)$/.test(e.target.tagName)) return; // typing your own sentence
       if (e.key === "Enter") { e.preventDefault(); i++; next(); }
       if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); speak(w.ex); }
     };
@@ -102,6 +106,7 @@ export async function render(root, [mode]) {
         v[1] ? h("p", { class: `verdict ${v[0]}` }, v[1]) : null,
         h("p", { class: "def" }, w.def),
         markedSentence(w.ex, w.word, { swipe: true }),
+        s.mine[w.id] ? h("p", { class: "syn" }, h("b", {}, "Your sentence: "), s.mine[w.id].text) : null,
         synLine(w),
         grades,
         h("p", { class: "keys" }, "Keys 1 to 4 choose an answer. Space plays the sentence."));
